@@ -6,7 +6,7 @@
                 "/usr/include",
                 "/usr/local/include",
                 "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/",
-                "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/4.2.1",
+                "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1",
                 "${workspaceRoot}/../../../libs/openFrameworks",
                 "${workspaceRoot}/../../../libs/openFrameworks/3d",
                 "${workspaceRoot}/../../../libs/openFrameworks/app",

@@ -10,6 +10,7 @@
             "cwd": "${workspaceRoot}",
             "environment": [],
             "externalConsole": false,
+            "preLaunchTask": "Build DEBUG",
             "linux": {
                 "MIMode": "gdb",
                 "setupCommands": [
