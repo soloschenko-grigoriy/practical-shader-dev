@@ -33,11 +33,15 @@ class ofApp : public ofBaseApp
 	ofShader cloudShader;
 	ofShader bgShader;
 	ofShader spritesheetShader;
-	
+
 	ofImage alienImg;
 	ofImage bgImg;
 	ofImage cloudImg;
 	ofImage sunImg;
+
+	bool walkRight;
+	bool walkLeft;
+	glm::vec3 charPos;
 
 public:
 	void setup();

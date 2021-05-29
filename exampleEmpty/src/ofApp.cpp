@@ -92,6 +92,16 @@ void ofApp::setup()
 //--------------------------------------------------------------
 void ofApp::update()
 {
+    float distance = 0.4 * ofGetLastFrameTime();
+
+    if (walkRight)
+    {
+        charPos += glm::vec3(distance, 0, 0);
+    }
+    else if (walkLeft)
+    {
+        charPos -= glm::vec3(distance, 0, 0);
+    }
 }
 
 //--------------------------------------------------------------
@@ -119,6 +129,7 @@ void ofApp::draw()
     spritesheetShader.setUniformTexture("tex", alienImg, 0);
     spritesheetShader.setUniform2f("size", spriteSize);
     spritesheetShader.setUniform2f("offset", spriteFrame);
+    spritesheetShader.setUniform3f("translation", charPos);
     charMesh.draw();
     spritesheetShader.end();
 
@@ -142,11 +153,27 @@ void ofApp::draw()
 //--------------------------------------------------------------
 void ofApp::keyPressed(int key)
 {
+    if (key == ofKey::OF_KEY_RIGHT)
+    {
+        walkRight = true;
+    }
+    else if (key == ofKey::OF_KEY_LEFT)
+    {
+        walkLeft = true;
+    }
 }
 
 //--------------------------------------------------------------
 void ofApp::keyReleased(int key)
 {
+    if (key == ofKey::OF_KEY_RIGHT)
+    {
+        walkRight = false;
+    }
+    else if (key == ofKey::OF_KEY_LEFT)
+    {
+        walkLeft = false;
+    }
 }
 
 //--------------------------------------------------------------
