@@ -33,8 +33,9 @@
             "type": "shell",
             "label": "Build DEBUG",
             "presentation": {
-                "reveal": "always",
-                "panel": "shared"
+                "reveal": "silent",
+                "panel": "shared",
+                
             },
             "command": "make Debug -j -s 2>&1 || exit 1",
             "group": {

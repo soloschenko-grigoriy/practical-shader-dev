@@ -18,11 +18,26 @@ public:
 
 class ofApp : public ofBaseApp
 {
-	ofMesh quad;
-	ofShader shader;
-	ofImage parrot;
-	ofImage checker;
-	float brightness;
+	// ofMesh quad;
+	// ofShader shader;
+	// ofImage parrot;
+	// ofImage checker;
+	// float brightness;
+
+	ofMesh charMesh;
+	ofMesh bgMesh;
+	ofMesh cloudMesh;
+	ofMesh sunMesh;
+
+	ofShader charShader;
+	ofShader cloudShader;
+	ofShader bgShader;
+	ofShader spritesheetShader;
+	
+	ofImage alienImg;
+	ofImage bgImg;
+	ofImage cloudImg;
+	ofImage sunImg;
 
 public:
 	void setup();
