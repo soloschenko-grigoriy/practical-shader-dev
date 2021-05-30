@@ -20,6 +20,7 @@ struct CameraData
 {
 	glm::vec3 position;
 	float rotation;
+	float fov;
 };
 
 class ofApp : public ofBaseApp
@@ -32,24 +33,27 @@ class ofApp : public ofBaseApp
 
 	CameraData cam;
 
-	ofMesh charMesh;
-	ofMesh bgMesh;
-	ofMesh cloudMesh;
-	ofMesh sunMesh;
+	// ofMesh charMesh;
+	// ofMesh bgMesh;
+	// ofMesh cloudMesh;
+	// ofMesh sunMesh;
 
-	ofShader charShader;
-	ofShader cloudShader;
-	ofShader bgShader;
-	ofShader spritesheetShader;
+	// ofShader charShader;
+	// ofShader cloudShader;
+	// ofShader bgShader;
+	// ofShader spritesheetShader;
 
-	ofImage alienImg;
-	ofImage bgImg;
-	ofImage cloudImg;
-	ofImage sunImg;
+	// ofImage alienImg;
+	// ofImage bgImg;
+	// ofImage cloudImg;
+	// ofImage sunImg;
 
-	bool walkRight;
-	bool walkLeft;
-	glm::vec3 charPos;
+	// bool walkRight;
+	// bool walkLeft;
+	// glm::vec3 charPos;
+
+	ofMesh torusMesh;
+	ofShader uvShader;
 
 public:
 	void setup();
