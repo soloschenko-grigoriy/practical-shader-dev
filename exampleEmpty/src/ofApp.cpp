@@ -92,8 +92,8 @@ void ofApp::setup()
     ofEnableDepthTest();
 
     buildMesh(charMesh, 0.1, 0.2, vec3(0.0, -0.2, 0.0));
-    buildMesh(bgMesh, 1.0, 1.0, vec3(0.0, 0.0, 0.5));
-    buildMesh(sunMesh, 1., 1., vec3(0., 0., 0.4));
+    buildMesh(bgMesh, 1.0, 1.0, vec3(0.0, 0.0, -0.5));
+    buildMesh(sunMesh, 1., 1., vec3(0., 0., -0.4));
     buildMesh(cloudMesh, .25, .15, vec3(0., 0., 0.));
 
     alienImg.load("ch_4/walk_sheet.png");
@@ -126,6 +126,7 @@ void ofApp::draw()
 {
     mat4 identity = mat4();
     mat4 view = buildViewMatrix(cam);
+    mat4 proj = ortho(-1.33f, 1.33f, -1.0f, 1.0f, 0.0f, 10.0f);
 
     // shader.begin();
     // shader.setUniformTexture("parrotTex", parrot, 0);
@@ -151,6 +152,7 @@ void ofApp::draw()
     spritesheetShader.setUniform2f("size", spriteSize);
     spritesheetShader.setUniform2f("offset", spriteFrame);
     spritesheetShader.setUniformMatrix4f("model", translate(charPos));
+    spritesheetShader.setUniformMatrix4f("proj", proj);
     charMesh.draw();
     spritesheetShader.end();
 
@@ -158,6 +160,7 @@ void ofApp::draw()
     bgShader.setUniformMatrix4f("view", view);
     bgShader.setUniformTexture("tex", bgImg, 0);
     bgShader.setUniformMatrix4f("model", identity);
+    bgShader.setUniformMatrix4f("proj", proj);
     bgMesh.draw();
     bgShader.end();
 
@@ -184,6 +187,7 @@ void ofApp::draw()
     cloudShader.setUniformMatrix4f("view", view);
     cloudShader.setUniformTexture("tex", cloudImg, 0);
     cloudShader.setUniformMatrix4f("model", finalMatrix);
+    cloudShader.setUniformMatrix4f("proj", proj);
     cloudMesh.draw();
 
     cloudShader.setUniformMatrix4f("model", transformB);
