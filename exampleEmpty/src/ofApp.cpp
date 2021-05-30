@@ -150,13 +150,26 @@ void ofApp::draw()
     ofDisableDepthTest();
     ofEnableBlendMode(ofBlendMode::OF_BLENDMODE_ALPHA);
 
+    static float rotation = 0.0f;
+    rotation += 0.1f * ofGetLastFrameTime();
+
     using namespace glm;
-    mat4 transformA = buildMatrix(vec3(-0.55, 0, 0), 0.0f, vec3(1.5, 1, 1));
+    // construct the transform for our un-rotated cloud
+    mat4 translationA = translate(vec3(-0.55, 0, 0));
+    mat4 scaleA = scale(vec3(1.5, 1, 1));
+    mat4 transformA = translationA * scaleA;
+
+    // apply a rotation to that
+    mat4 ourRotation = rotate(rotation, vec3(0.0, 0.0, 1.0));
+    mat4 newMatrix = translationA * ourRotation * inverse(translationA);
+    mat4 finalMatrix = newMatrix * transformA;
+
+    // mat4 transformA = buildMatrix(vec3(-0.55, 0, 0), rotation, vec3(1.5, 1, 1));
     mat4 transformB = buildMatrix(vec3(0.4, 0.2, 0), 1.0f, vec3(1, 1, 1));
 
     cloudShader.begin();
     cloudShader.setUniformTexture("tex", cloudImg, 0);
-    cloudShader.setUniformMatrix4f("transform", transformA);
+    cloudShader.setUniformMatrix4f("transform", finalMatrix);
     cloudMesh.draw();
 
     cloudShader.setUniformMatrix4f("transform", transformB);
