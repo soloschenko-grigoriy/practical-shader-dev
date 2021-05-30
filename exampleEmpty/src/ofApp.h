@@ -23,6 +23,13 @@ struct CameraData
 	float fov;
 };
 
+struct DirectionalLight
+{
+	glm::vec3 direction;
+	glm::vec3 color;
+	float intensity;
+};
+
 class ofApp : public ofBaseApp
 {
 	// ofMesh quad;
@@ -54,6 +61,7 @@ class ofApp : public ofBaseApp
 
 	ofMesh torusMesh;
 	ofShader uvShader;
+	ofShader diffuseShader;
 
 public:
 	void setup();

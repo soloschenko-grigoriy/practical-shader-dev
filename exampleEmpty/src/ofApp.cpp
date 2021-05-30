@@ -52,6 +52,16 @@ using namespace glm;
 //     return inverse(buildMatrix(cam.position, cam.rotation, vec3(1, 1, 1)));
 // }
 
+vec3 getLightDirection(DirectionalLight &l)
+{
+    return normalize(l.direction * -1.0f);
+}
+
+vec3 getLightColor(DirectionalLight &l)
+{
+    return l.color * l.intensity;
+}
+
 //--------------------------------------------------------------
 void ofApp::setup()
 {
@@ -109,7 +119,8 @@ void ofApp::setup()
     ofEnableDepthTest();
 
     torusMesh.load("ch_7/torus.ply");
-    uvShader.load("ch_8/mesh.vert", "ch_8/normal_vis.frag");
+    // uvShader.load("ch_8/mesh.vert", "ch_8/normal_vis.frag");
+    diffuseShader.load("ch_8/mesh.vert", "ch_8/diffuse.frag");
 }
 
 //--------------------------------------------------------------
@@ -206,21 +217,32 @@ void ofApp::draw()
     // sunMesh.draw();
     // cloudShader.end();
 
-    cam.position = vec3(0, 0, 1);
+    DirectionalLight dirLight;
+    dirLight.direction = normalize(vec3(0, 1, 0));
+    dirLight.color = vec3(1, 1, 1);
+    dirLight.intensity = 1.0f;
+
+    cam.position = vec3(0, 0.75f, 1.0f);
     cam.fov = radians(100.0f);
+    float cAngle = radians(-45.0f);
+    vec3 right = vec3(1, 0, 0);
+
     float aspect = 1024.0f / 768.0f;
 
-    mat4 model = rotate(1.0f, vec3(1, 1, 1)) * scale(vec3(0.5, 0.5, 0.5));
-    mat4 view = inverse(translate(cam.position));
+    mat4 model = rotate(radians(90.0f), right) * scale(vec3(0.5, 0.5, 0.5));
+    mat4 view = inverse(translate(cam.position) * rotate(cAngle, right));
     mat4 proj = perspective(cam.fov, aspect, 0.01f, 10.0f);
     mat4 mvp = proj * view * model;
     mat3 normalMatrix = (transpose(inverse(mat3(model))));
 
-    uvShader.begin();
-    uvShader.setUniformMatrix4f("mvp", mvp);
-    uvShader.setUniformMatrix3f("normalMatrix", normalMatrix);
+    diffuseShader.begin();
+    diffuseShader.setUniformMatrix4f("mvp", mvp);
+    diffuseShader.setUniformMatrix3f("normalMatrix", normalMatrix);
+    diffuseShader.setUniform3f("meshColor", vec3(1, 0, 0));
+    diffuseShader.setUniform3f("lightDir", getLightDirection(dirLight));
+    diffuseShader.setUniform3f("lightColor", getLightColor(dirLight));
     torusMesh.draw();
-    uvShader.end();
+    diffuseShader.end();
 }
 
 //--------------------------------------------------------------

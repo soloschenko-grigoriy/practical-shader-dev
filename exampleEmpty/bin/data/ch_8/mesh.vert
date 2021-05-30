@@ -6,9 +6,21 @@ layout (location = 2) in vec3 nrm;
 uniform mat4 mvp;
 uniform mat3 normalMatrix;
 
-out vec3 fragNrm;
+out vec3 fragNorm;
+
+// float angleBetween(vec3 a, vec3 b){
+//     float d = dot(a, b);
+//     float len = length(a) * length(b);
+
+//     float cosAngle = d / len;
+//     float angle = acos(cosAngle);
+
+//     return angle;
+// }
 
 void main (){
     gl_Position = mvp * vec4(pos, 1.0);
-    fragNrm = (nrm * normalMatrix).xyz;
+    fragNorm = (nrm * normalMatrix).xyz;
 }
+
+
