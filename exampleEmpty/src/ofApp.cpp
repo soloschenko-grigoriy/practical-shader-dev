@@ -1,6 +1,7 @@
 #include "ofApp.h"
+using namespace glm;
 
-void buildMesh(ofMesh &mesh, float w, float h, glm::vec3 pos)
+void buildMesh(ofMesh &mesh, float w, float h, vec3 pos)
 {
     float verts[] = {-w + pos.x,
                      -h + pos.y,
@@ -29,19 +30,19 @@ void buildMesh(ofMesh &mesh, float w, float h, glm::vec3 pos)
         int idx = i * 3;
         int uvIdx = i * 2;
 
-        mesh.addVertex(glm::vec3(verts[idx], verts[idx + 1], verts[idx + 2]));
-        mesh.addTexCoord(glm::vec2(uvs[uvIdx], uvs[uvIdx + 1]));
+        mesh.addVertex(vec3(verts[idx], verts[idx + 1], verts[idx + 2]));
+        mesh.addTexCoord(vec2(uvs[uvIdx], uvs[uvIdx + 1]));
     }
 
     ofIndexType indicies[6] = {0, 1, 2, 2, 3, 0};
     mesh.addIndices(indicies, 6);
 }
 
-glm::mat4 buildMatrix(glm::vec3 translate, float rotate, glm::vec3 scale)
+mat4 buildMatrix(vec3 t, float r, vec3 s)
 {
-    glm::mat4 translation = glm::translate(translate);
-    glm::mat4 rotation = glm::rotate(rotate, glm::vec3(0.0, 0.0, 1.0));
-    glm::mat4 scaler = glm::scale(scale);
+    mat4 translation = translate(t);
+    mat4 rotation = rotate(r, vec3(0.0, 0.0, 1.0));
+    mat4 scaler = scale(s);
 
     return translation * rotation * scaler;
 }
@@ -49,20 +50,20 @@ glm::mat4 buildMatrix(glm::vec3 translate, float rotate, glm::vec3 scale)
 //--------------------------------------------------------------
 void ofApp::setup()
 {
-    // quad.addVertex(glm::vec3(-1, -1, 0));
-    // quad.addVertex(glm::vec3(-1, 1, 0));
-    // quad.addVertex(glm::vec3(1, 1, 0));
-    // quad.addVertex(glm::vec3(1, -1, 0));
+    // quad.addVertex(vec3(-1, -1, 0));
+    // quad.addVertex(vec3(-1, 1, 0));
+    // quad.addVertex(vec3(1, 1, 0));
+    // quad.addVertex(vec3(1, -1, 0));
 
     // quad.addColor(ofDefaultColorType(1, 0, 0, 1));
     // quad.addColor(ofDefaultColorType(0, 1, 0, 1));
     // quad.addColor(ofDefaultColorType(0, 0, 1, 1));
     // quad.addColor(ofDefaultColorType(1, 1, 1, 1));
 
-    // quad.addTexCoord(glm::vec2(0, 0));
-    // quad.addTexCoord(glm::vec2(0, 1));
-    // quad.addTexCoord(glm::vec2(1, 1));
-    // quad.addTexCoord(glm::vec2(1, 0));
+    // quad.addTexCoord(vec2(0, 0));
+    // quad.addTexCoord(vec2(0, 1));
+    // quad.addTexCoord(vec2(1, 1));
+    // quad.addTexCoord(vec2(1, 0));
 
     // ofIndexType indices[6] = {0, 1, 2, 2, 3, 0};
     // quad.addIndices(indices, 6);
@@ -83,19 +84,19 @@ void ofApp::setup()
     ofDisableArbTex();
     ofEnableDepthTest();
 
-    buildMesh(charMesh, 0.1, 0.2, glm::vec3(0.0, -0.2, 0.0));
-    buildMesh(bgMesh, 1.0, 1.0, glm::vec3(0.0, 0.0, 0.5));
-    buildMesh(sunMesh, 1., 1., glm::vec3(0., 0., 0.4));
-    buildMesh(cloudMesh, .25, .15, glm::vec3(0., 0., 0.));
+    buildMesh(charMesh, 0.1, 0.2, vec3(0.0, -0.2, 0.0));
+    buildMesh(bgMesh, 1.0, 1.0, vec3(0.0, 0.0, 0.5));
+    buildMesh(sunMesh, 1., 1., vec3(0., 0., 0.4));
+    buildMesh(cloudMesh, .25, .15, vec3(0., 0., 0.));
 
     alienImg.load("ch_4/walk_sheet.png");
     bgImg.load("ch_4/forest.png");
     cloudImg.load("ch_4/cloud.png");
     sunImg.load("ch_4/sun.png");
 
-    bgShader.load("ch_4/passthrough.vert", "ch_4/alphaTest.frag");
-    cloudShader.load("cloud.vert", "ch_4/cloud.frag");
-    spritesheetShader.load("ch_4/spritesheet.vert", "ch_4/alphaTest.frag");
+    bgShader.load("ch_5/passthrough.vert", "ch_4/alphaTest.frag");
+    cloudShader.load("ch_5/passthrough.vert", "ch_4/cloud.frag");
+    spritesheetShader.load("ch_5/spritesheet.vert", "ch_4/alphaTest.frag");
 }
 
 //--------------------------------------------------------------
@@ -105,31 +106,33 @@ void ofApp::update()
 
     if (walkRight)
     {
-        charPos += glm::vec3(distance, 0, 0);
+        charPos += vec3(distance, 0, 0);
     }
     else if (walkLeft)
     {
-        charPos -= glm::vec3(distance, 0, 0);
+        charPos -= vec3(distance, 0, 0);
     }
 }
 
 //--------------------------------------------------------------
 void ofApp::draw()
 {
+    mat4 identity = mat4();
+
     // shader.begin();
     // shader.setUniformTexture("parrotTex", parrot, 0);
     // shader.setUniformTexture("checkerTex", checker, 1);
     // shader.setUniform1f("time", ofGetElapsedTimef());
     // shader.setUniform1f("brightness", brightness);
-    // shader.setUniform4f("multiply", glm::vec4(1., 1., 1., 1.));
-    // shader.setUniform4f("add", glm::vec4(0.25, .25, .25, 1.));
+    // shader.setUniform4f("multiply", vec4(1., 1., 1., 1.));
+    // shader.setUniform4f("add", vec4(0.25, .25, .25, 1.));
     // quad.draw();
     // shader.end();
 
     static float frame = 0.0;
     frame = (frame > 10) ? 0.0 : frame += 0.2;
-    glm::vec2 spriteSize = glm::vec2(0.28, 0.19);
-    glm::vec2 spriteFrame = glm::vec2((int)frame % 3, (int)frame / 3);
+    vec2 spriteSize = vec2(0.28, 0.19);
+    vec2 spriteFrame = vec2((int)frame % 3, (int)frame / 3);
 
     ofDisableBlendMode();
     ofEnableDepthTest();
@@ -138,12 +141,13 @@ void ofApp::draw()
     spritesheetShader.setUniformTexture("tex", alienImg, 0);
     spritesheetShader.setUniform2f("size", spriteSize);
     spritesheetShader.setUniform2f("offset", spriteFrame);
-    spritesheetShader.setUniform3f("translation", charPos);
+    spritesheetShader.setUniformMatrix4f("transform", translate(charPos));
     charMesh.draw();
     spritesheetShader.end();
 
     bgShader.begin();
     bgShader.setUniformTexture("tex", bgImg, 0);
+    bgShader.setUniformMatrix4f("transform", identity);
     bgMesh.draw();
     bgShader.end();
 
@@ -153,7 +157,6 @@ void ofApp::draw()
     static float rotation = 0.0f;
     rotation += 0.1f * ofGetLastFrameTime();
 
-    using namespace glm;
     // construct the transform for our un-rotated cloud
     mat4 translationA = translate(vec3(-0.55, 0, 0));
     mat4 scaleA = scale(vec3(1.5, 1, 1));
@@ -177,7 +180,9 @@ void ofApp::draw()
 
     ofEnableBlendMode(ofBlendMode::OF_BLENDMODE_ADD);
     cloudShader.setUniformTexture("tex", sunImg, 0);
-    // sunMesh.draw();
+    cloudShader.setUniformMatrix4f("transform", identity);
+
+    sunMesh.draw();
     cloudShader.end();
 }
 
