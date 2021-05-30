@@ -37,6 +37,15 @@ void buildMesh(ofMesh &mesh, float w, float h, glm::vec3 pos)
     mesh.addIndices(indicies, 6);
 }
 
+glm::mat4 buildMatrix(glm::vec3 translate, float rotate, glm::vec3 scale)
+{
+    glm::mat4 translation = glm::translate(translate);
+    glm::mat4 rotation = glm::rotate(rotate, glm::vec3(0.0, 0.0, 1.0));
+    glm::mat4 scaler = glm::scale(scale);
+
+    return translation * rotation * scaler;
+}
+
 //--------------------------------------------------------------
 void ofApp::setup()
 {
@@ -141,16 +150,16 @@ void ofApp::draw()
     ofDisableDepthTest();
     ofEnableBlendMode(ofBlendMode::OF_BLENDMODE_ALPHA);
 
+    using namespace glm;
+    mat4 transformA = buildMatrix(vec3(-0.55, 0, 0), 0.0f, vec3(1.5, 1, 1));
+    mat4 transformB = buildMatrix(vec3(0.4, 0.2, 0), 1.0f, vec3(1, 1, 1));
+
     cloudShader.begin();
     cloudShader.setUniformTexture("tex", cloudImg, 0);
-    cloudShader.setUniform3f("scale", glm::vec3(1.5, 1, 1));
-    cloudShader.setUniform1f("rotation", 0.0f);
-    cloudShader.setUniform3f("translation", glm::vec3(-0.55, 0, 0));
+    cloudShader.setUniformMatrix4f("transform", transformA);
     cloudMesh.draw();
 
-    cloudShader.setUniform3f("scale", glm::vec3(1, 1, 1));
-    cloudShader.setUniform1f("rotation", 1.0f);
-    cloudShader.setUniform3f("translation", glm::vec3(0.4, 0.2, 0));
+    cloudShader.setUniformMatrix4f("transform", transformB);
     cloudMesh.draw();
 
     ofEnableBlendMode(ofBlendMode::OF_BLENDMODE_ADD);
