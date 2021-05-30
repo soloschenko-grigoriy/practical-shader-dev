@@ -77,7 +77,7 @@ void ofApp::setup()
     buildMesh(charMesh, 0.1, 0.2, glm::vec3(0.0, -0.2, 0.0));
     buildMesh(bgMesh, 1.0, 1.0, glm::vec3(0.0, 0.0, 0.5));
     buildMesh(sunMesh, 1., 1., glm::vec3(0., 0., 0.4));
-    buildMesh(cloudMesh, .2, .1, glm::vec3(-0.4, 0, 0.0));
+    buildMesh(cloudMesh, .25, .15, glm::vec3(0., 0., 0.));
 
     alienImg.load("ch_4/walk_sheet.png");
     bgImg.load("ch_4/forest.png");
@@ -85,7 +85,7 @@ void ofApp::setup()
     sunImg.load("ch_4/sun.png");
 
     bgShader.load("ch_4/passthrough.vert", "ch_4/alphaTest.frag");
-    cloudShader.load("ch_4/passthrough.vert", "ch_4/cloud.frag");
+    cloudShader.load("cloud.vert", "ch_4/cloud.frag");
     spritesheetShader.load("ch_4/spritesheet.vert", "ch_4/alphaTest.frag");
 }
 
@@ -143,10 +143,19 @@ void ofApp::draw()
 
     cloudShader.begin();
     cloudShader.setUniformTexture("tex", cloudImg, 0);
+    cloudShader.setUniform3f("scale", glm::vec3(1.5, 1, 1));
+    cloudShader.setUniform1f("rotation", 0.0f);
+    cloudShader.setUniform3f("translation", glm::vec3(-0.55, 0, 0));
     cloudMesh.draw();
+
+    cloudShader.setUniform3f("scale", glm::vec3(1, 1, 1));
+    cloudShader.setUniform1f("rotation", 1.0f);
+    cloudShader.setUniform3f("translation", glm::vec3(0.4, 0.2, 0));
+    cloudMesh.draw();
+
     ofEnableBlendMode(ofBlendMode::OF_BLENDMODE_ADD);
     cloudShader.setUniformTexture("tex", sunImg, 0);
-    sunMesh.draw();
+    // sunMesh.draw();
     cloudShader.end();
 }
 
