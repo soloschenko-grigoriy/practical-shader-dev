@@ -214,9 +214,11 @@ void ofApp::draw()
     mat4 view = inverse(translate(cam.position));
     mat4 proj = perspective(cam.fov, aspect, 0.01f, 10.0f);
     mat4 mvp = proj * view * model;
+    mat3 normalMatrix = (transpose(inverse(mat3(model))));
 
     uvShader.begin();
     uvShader.setUniformMatrix4f("mvp", mvp);
+    uvShader.setUniformMatrix3f("normalMatrix", normalMatrix);
     torusMesh.draw();
     uvShader.end();
 }
