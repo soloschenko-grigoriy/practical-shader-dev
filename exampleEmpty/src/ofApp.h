@@ -16,6 +16,12 @@ public:
 	float f;
 };
 
+struct CameraData
+{
+	glm::vec3 position;
+	float rotation;
+};
+
 class ofApp : public ofBaseApp
 {
 	// ofMesh quad;
@@ -23,6 +29,8 @@ class ofApp : public ofBaseApp
 	// ofImage parrot;
 	// ofImage checker;
 	// float brightness;
+
+	CameraData cam;
 
 	ofMesh charMesh;
 	ofMesh bgMesh;

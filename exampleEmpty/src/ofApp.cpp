@@ -47,6 +47,11 @@ mat4 buildMatrix(vec3 t, float r, vec3 s)
     return translation * rotation * scaler;
 }
 
+mat4 buildViewMatrix(CameraData cam)
+{
+    return inverse(buildMatrix(cam.position, cam.rotation, vec3(1, 1, 1)));
+}
+
 //--------------------------------------------------------------
 void ofApp::setup()
 {
@@ -81,6 +86,8 @@ void ofApp::setup()
 
     // brightness = 0.5;
 
+    cam.position = vec3(0, 0, 0);
+
     ofDisableArbTex();
     ofEnableDepthTest();
 
@@ -94,9 +101,9 @@ void ofApp::setup()
     cloudImg.load("ch_4/cloud.png");
     sunImg.load("ch_4/sun.png");
 
-    bgShader.load("ch_5/passthrough.vert", "ch_4/alphaTest.frag");
-    cloudShader.load("ch_5/passthrough.vert", "ch_4/cloud.frag");
-    spritesheetShader.load("ch_5/spritesheet.vert", "ch_4/alphaTest.frag");
+    bgShader.load("ch_6/passthrough.vert", "ch_4/alphaTest.frag");
+    cloudShader.load("ch_6/passthrough.vert", "ch_4/cloud.frag");
+    spritesheetShader.load("ch_6/spritesheet.vert", "ch_4/alphaTest.frag");
 }
 
 //--------------------------------------------------------------
@@ -118,6 +125,7 @@ void ofApp::update()
 void ofApp::draw()
 {
     mat4 identity = mat4();
+    mat4 view = buildViewMatrix(cam);
 
     // shader.begin();
     // shader.setUniformTexture("parrotTex", parrot, 0);
@@ -138,16 +146,18 @@ void ofApp::draw()
     ofEnableDepthTest();
 
     spritesheetShader.begin();
+    spritesheetShader.setUniformMatrix4f("view", view);
     spritesheetShader.setUniformTexture("tex", alienImg, 0);
     spritesheetShader.setUniform2f("size", spriteSize);
     spritesheetShader.setUniform2f("offset", spriteFrame);
-    spritesheetShader.setUniformMatrix4f("transform", translate(charPos));
+    spritesheetShader.setUniformMatrix4f("model", translate(charPos));
     charMesh.draw();
     spritesheetShader.end();
 
     bgShader.begin();
+    bgShader.setUniformMatrix4f("view", view);
     bgShader.setUniformTexture("tex", bgImg, 0);
-    bgShader.setUniformMatrix4f("transform", identity);
+    bgShader.setUniformMatrix4f("model", identity);
     bgMesh.draw();
     bgShader.end();
 
@@ -171,16 +181,17 @@ void ofApp::draw()
     mat4 transformB = buildMatrix(vec3(0.4, 0.2, 0), 1.0f, vec3(1, 1, 1));
 
     cloudShader.begin();
+    cloudShader.setUniformMatrix4f("view", view);
     cloudShader.setUniformTexture("tex", cloudImg, 0);
-    cloudShader.setUniformMatrix4f("transform", finalMatrix);
+    cloudShader.setUniformMatrix4f("model", finalMatrix);
     cloudMesh.draw();
 
-    cloudShader.setUniformMatrix4f("transform", transformB);
+    cloudShader.setUniformMatrix4f("model", transformB);
     cloudMesh.draw();
 
     ofEnableBlendMode(ofBlendMode::OF_BLENDMODE_ADD);
     cloudShader.setUniformTexture("tex", sunImg, 0);
-    cloudShader.setUniformMatrix4f("transform", identity);
+    cloudShader.setUniformMatrix4f("model", identity);
 
     sunMesh.draw();
     cloudShader.end();
