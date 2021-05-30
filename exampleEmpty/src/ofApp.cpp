@@ -117,10 +117,11 @@ void ofApp::setup()
 
     ofDisableArbTex();
     ofEnableDepthTest();
+    ofSetBackgroundColor(ofColor::black);
 
     torusMesh.load("ch_7/torus.ply");
     // uvShader.load("ch_8/mesh.vert", "ch_8/normal_vis.frag");
-    diffuseShader.load("ch_8/mesh.vert", "ch_8/diffuse.frag");
+    diffuseShader.load("ch_8/mesh.vert", "ch_8/rim+light.frag");
 }
 
 //--------------------------------------------------------------
@@ -218,7 +219,7 @@ void ofApp::draw()
     // cloudShader.end();
 
     DirectionalLight dirLight;
-    dirLight.direction = normalize(vec3(0, 1, 0));
+    dirLight.direction = normalize(vec3(0, -1, 0));
     dirLight.color = vec3(1, 1, 1);
     dirLight.intensity = 1.0f;
 
@@ -241,6 +242,8 @@ void ofApp::draw()
     diffuseShader.setUniform3f("meshColor", vec3(1, 0, 0));
     diffuseShader.setUniform3f("lightDir", getLightDirection(dirLight));
     diffuseShader.setUniform3f("lightColor", getLightColor(dirLight));
+    diffuseShader.setUniform3f("cameraPosition", cam.position);
+    diffuseShader.setUniformMatrix4f("model", model);
     torusMesh.draw();
     diffuseShader.end();
 }

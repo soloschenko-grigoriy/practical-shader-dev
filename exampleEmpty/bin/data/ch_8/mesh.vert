@@ -4,9 +4,11 @@ layout (location = 0) in vec3 pos;
 layout (location = 2) in vec3 nrm;
 
 uniform mat4 mvp;
+uniform mat4 model;
 uniform mat3 normalMatrix;
 
 out vec3 fragNorm;
+out vec3 fragWorldPosition;
 
 // float angleBetween(vec3 a, vec3 b){
 //     float d = dot(a, b);
@@ -20,7 +22,8 @@ out vec3 fragNorm;
 
 void main (){
     gl_Position = mvp * vec4(pos, 1.0);
-    fragNorm = (nrm * normalMatrix).xyz;
+    fragNorm = (normalMatrix * nrm).xyz;
+    fragWorldPosition = (model * vec4(pos, 1.0)).xyz;
 }
 
 
