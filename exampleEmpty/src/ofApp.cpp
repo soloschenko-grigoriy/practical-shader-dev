@@ -117,11 +117,10 @@ void ofApp::setup()
 
     ofDisableArbTex();
     ofEnableDepthTest();
-    ofSetBackgroundColor(ofColor::black);
+    // ofSetBackgroundColor(ofColor::black);
 
     torusMesh.load("ch_7/torus.ply");
-    // uvShader.load("ch_8/mesh.vert", "ch_8/normal_vis.frag");
-    diffuseShader.load("ch_8/mesh.vert", "ch_8/rim+light.frag");
+    specularShader.load("ch_9/mesh.vert", "ch_9/specular.frag");
 }
 
 //--------------------------------------------------------------
@@ -219,12 +218,12 @@ void ofApp::draw()
     // cloudShader.end();
 
     DirectionalLight dirLight;
-    dirLight.direction = normalize(vec3(0, -1, 0));
+    dirLight.direction = normalize(vec3(1, -1, 0));
     dirLight.color = vec3(1, 1, 1);
     dirLight.intensity = 1.0f;
 
     cam.position = vec3(0, 0.75f, 1.0f);
-    cam.fov = radians(100.0f);
+    cam.fov = radians(90.0f);
     float cAngle = radians(-45.0f);
     vec3 right = vec3(1, 0, 0);
 
@@ -236,16 +235,18 @@ void ofApp::draw()
     mat4 mvp = proj * view * model;
     mat3 normalMatrix = (transpose(inverse(mat3(model))));
 
-    diffuseShader.begin();
-    diffuseShader.setUniformMatrix4f("mvp", mvp);
-    diffuseShader.setUniformMatrix3f("normalMatrix", normalMatrix);
-    diffuseShader.setUniform3f("meshColor", vec3(1, 0, 0));
-    diffuseShader.setUniform3f("lightDir", getLightDirection(dirLight));
-    diffuseShader.setUniform3f("lightColor", getLightColor(dirLight));
-    diffuseShader.setUniform3f("cameraPosition", cam.position);
-    diffuseShader.setUniformMatrix4f("model", model);
+    specularShader.begin();
+    specularShader.setUniformMatrix4f("mvp", mvp);
+    specularShader.setUniformMatrix3f("normalMatrix", normalMatrix);
+    specularShader.setUniform3f("meshColor", vec3(1, 1, 0));
+    specularShader.setUniform3f("lightDir", getLightDirection(dirLight));
+    specularShader.setUniform3f("lightColor", getLightColor(dirLight));
+    specularShader.setUniform3f("cameraPosition", cam.position);
+    specularShader.setUniform3f("meshSpecCol", vec3(1, 1, 1));
+    specularShader.setUniformMatrix4f("model", model);
+    specularShader.setUniform3f("ambientCol", glm::vec3(0.0,0.,0.));
     torusMesh.draw();
-    diffuseShader.end();
+    specularShader.end();
 }
 
 //--------------------------------------------------------------

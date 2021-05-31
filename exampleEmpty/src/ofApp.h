@@ -61,7 +61,7 @@ class ofApp : public ofBaseApp
 
 	ofMesh torusMesh;
 	ofShader uvShader;
-	ofShader diffuseShader;
+	ofShader specularShader;
 
 public:
 	void setup();

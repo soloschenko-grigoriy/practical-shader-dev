@@ -10,6 +10,13 @@ uniform mat3 normalMatrix;
 out vec3 fragNorm;
 out vec3 fragWorldPosition;
 
+void main () {
+    gl_Position = mvp * vec4(pos, 1.0);
+    fragNorm = (normalMatrix * nrm).xyz;
+    fragWorldPosition = (model * vec4(pos, 1.0)).xyz;
+}
+
+
 // float angleBetween(vec3 a, vec3 b){
 //     float d = dot(a, b);
 //     float len = length(a) * length(b);
@@ -19,11 +26,3 @@ out vec3 fragWorldPosition;
 
 //     return angle;
 // }
-
-void main (){
-    gl_Position = mvp * vec4(pos, 1.0);
-    fragNorm = (normalMatrix * nrm).xyz;
-    fragWorldPosition = (model * vec4(pos, 1.0)).xyz;
-}
-
-
