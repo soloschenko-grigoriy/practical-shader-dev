@@ -61,62 +61,61 @@ vec3 getLightColor(DirectionalLight &l)
 {
     return l.color * l.intensity;
 }
-void calcTangents(ofMesh& mesh)
+void calcTangents(ofMesh &mesh)
 {
-	using namespace glm;
-	std::vector<vec4> tangents;
-	tangents.resize(mesh.getNumVertices());
+    using namespace glm;
+    std::vector<vec4> tangents;
+    tangents.resize(mesh.getNumVertices());
 
-	uint indexCount = mesh.getNumIndices();
+    uint indexCount = mesh.getNumIndices();
 
-	const vec3* vertices = mesh.getVerticesPointer();
-	const vec2* uvs = mesh.getTexCoordsPointer();
-	const uint* indices = mesh.getIndexPointer();
+    const vec3 *vertices = mesh.getVerticesPointer();
+    const vec2 *uvs = mesh.getTexCoordsPointer();
+    const uint *indices = mesh.getIndexPointer();
 
-	for (uint i = 0; i < indexCount - 2; i += 3)
-	{
-		const vec3& v0 = vertices[indices[i]];
-		const vec3& v1 = vertices[indices[i + 1]];
-		const vec3& v2 = vertices[indices[i + 2]];
-		const vec2& uv0 = uvs[indices[i]];
-		const vec2& uv1 = uvs[indices[i + 1]];
-		const vec2& uv2 = uvs[indices[i + 2]];
+    for (uint i = 0; i < indexCount - 2; i += 3)
+    {
+        const vec3 &v0 = vertices[indices[i]];
+        const vec3 &v1 = vertices[indices[i + 1]];
+        const vec3 &v2 = vertices[indices[i + 2]];
+        const vec2 &uv0 = uvs[indices[i]];
+        const vec2 &uv1 = uvs[indices[i + 1]];
+        const vec2 &uv2 = uvs[indices[i + 2]];
 
-		vec3 edge1 = v1 - v0;
-		vec3 edge2 = v2 - v0;
-		vec2 dUV1 = uv1 - uv0;
-		vec2 dUV2 = uv2 - uv0;
+        vec3 edge1 = v1 - v0;
+        vec3 edge2 = v2 - v0;
+        vec2 dUV1 = uv1 - uv0;
+        vec2 dUV2 = uv2 - uv0;
 
-		float f = 1.0f / (dUV1.x * dUV2.y - dUV2.x * dUV1.y);
+        float f = 1.0f / (dUV1.x * dUV2.y - dUV2.x * dUV1.y);
 
-		vec4 tan;
-		tan.x = f * (dUV2.y * edge1.x - dUV1.y * edge2.x);
-		tan.y = f * (dUV2.y * edge1.y - dUV1.y * edge2.y);
-		tan.z = f * (dUV2.y * edge1.z - dUV1.y * edge2.z);
-		tan.w = 0;
-		tan = normalize(tan);
+        vec4 tan;
+        tan.x = f * (dUV2.y * edge1.x - dUV1.y * edge2.x);
+        tan.y = f * (dUV2.y * edge1.y - dUV1.y * edge2.y);
+        tan.z = f * (dUV2.y * edge1.z - dUV1.y * edge2.z);
+        tan.w = 0;
+        tan = normalize(tan);
 
-		tangents[indices[i]] += (tan);
-		tangents[indices[i + 1]] += (tan);
-		tangents[indices[i + 2]] += (tan);
-	}
+        tangents[indices[i]] += (tan);
+        tangents[indices[i + 1]] += (tan);
+        tangents[indices[i + 2]] += (tan);
+    }
 
-	int numColors = mesh.getNumColors();
+    int numColors = mesh.getNumColors();
 
-	for (int i = 0; i < tangents.size(); ++i)
-	{
-		vec3 t = normalize(tangents[i]);
-		if (i >= numColors)
-		{
-			mesh.addColor(ofFloatColor(t.x, t.y, t.z, 0.0));
-		}
-		else
-		{
-			mesh.setColor(i, ofFloatColor(t.x, t.y, t.z, 0.0));
-		}
-	}
+    for (int i = 0; i < tangents.size(); ++i)
+    {
+        vec3 t = normalize(tangents[i]);
+        if (i >= numColors)
+        {
+            mesh.addColor(ofFloatColor(t.x, t.y, t.z, 0.0));
+        }
+        else
+        {
+            mesh.setColor(i, ofFloatColor(t.x, t.y, t.z, 0.0));
+        }
+    }
 }
-
 
 //--------------------------------------------------------------
 void ofApp::setup()
@@ -188,20 +187,26 @@ void ofApp::setup()
     ofDisableArbTex();
     ofEnableDepthTest();
 
-    planeMesh.load("ch_10/plane.ply");
-    calcTangents(planeMesh);
+    // planeMesh.load("ch_10/plane.ply");
+    // calcTangents(planeMesh);
 
-    shieldMesh.load("ch_9/shield.ply");
-    calcTangents(shieldMesh);
+    // shieldMesh.load("ch_9/shield.ply");
+    // calcTangents(shieldMesh);
 
-    blinnPhong.load("ch_10/mesh.vert", "ch_10/blinnPhong.frag");
-    waterShader.load("ch_10/water.vert", "ch_10/water.frag");
+    // blinnPhong.load("ch_10/mesh.vert", "ch_10/blinnPhong.frag");
+    // waterShader.load("ch_10/water.vert", "ch_10/water.frag");
 
-    diffuseTex.load("ch_9/shield_diffuse.png");
-    specTex.load("ch_9/shield_spec.png");
-    nrmTex.load("ch_10/shield_normal.png");
-    waterNrm.load("ch_10/water_nrm.png");
-    waterNrm.getTexture().setTextureWrap(GL_REPEAT, GL_REPEAT);
+    // diffuseTex.load("ch_9/shield_diffuse.png");
+    // specTex.load("ch_9/shield_spec.png");
+    // nrmTex.load("ch_10/shield_normal.png");
+    // waterNrm.load("ch_10/water_nrm.png");
+    // waterNrm.getTexture().setTextureWrap(GL_REPEAT, GL_REPEAT);
+
+    cubeMesh.load("ch_11/cube.ply");
+    cubemapShader.load("ch_11/cubemap.vert", "ch_11/cubemap.frag");
+    cubemap.load("ch_11/cube_front.jpg", "ch_11/cube_back.jpg",
+                 "ch_11/cube_right.jpg", "ch_11/cube_left.jpg",
+                 "ch_11/cube_top.jpg", "ch_11/cube_bottom.jpg");
 
     cam.position = glm::vec3(0, 0.75f, 1.0);
     cam.fov = glm::radians(90.0f);
@@ -278,6 +283,28 @@ void ofApp::drawShield(DirectionalLight &dirLight, glm::mat4 &proj, glm::mat4 &v
     shd.setUniform3f("lightColor", getLightColor(dirLight));
     shd.setUniform3f("cameraPosition", cam.position);
     shieldMesh.draw();
+    shd.end();
+}
+
+void ofApp::drawCube(glm::mat4 &proj, glm::mat4 &view)
+{
+    using namespace glm;
+
+    static float rotAngle = 0.0;
+    rotAngle += 0.2f;
+
+    mat4 r = rotate(radians(rotAngle), vec3(0, 1, 0));
+    mat4 s = scale(vec3(0.4, 0.4, 0.4));
+    mat4 model = translate(vec3(0.0, 0.75, 0.0f)) * r * s;
+    mat4 mvp = proj * view * model;
+
+    ofShader &shd = cubemapShader;
+
+    shd.begin();
+    shd.setUniformMatrix4f("mvp", mvp);
+    shd.setUniformTexture("cubemap", cubemap.getTexture(), 0);
+    shd.setUniform3f("cameraPos", cam.position);
+    cubeMesh.draw();
     shd.end();
 }
 
@@ -398,6 +425,9 @@ void ofApp::draw()
     // planeMesh.draw();
     // specularShader.end();
 
+    // drawShield(dirLight, proj, view);
+    // drawWater(waterLight, proj, view);
+
     DirectionalLight dirLight;
     dirLight.direction = glm::normalize(glm::vec3(0.5, -1, -1));
     dirLight.color = glm::vec3(1, 1, 1);
@@ -410,10 +440,12 @@ void ofApp::draw()
 
     mat4 proj = perspective(cam.fov, 1024.0f / 768.0f, 0.01f, 10.0f);
 
-    mat4 view = inverse(translate(cam.position));
+    cam.position = glm::vec3(0, 0.75f, 1.0);
 
-    drawShield(dirLight, proj, view);
-    drawWater(waterLight, proj, view);
+    mat4 rotation = mat4();
+    mat4 view = inverse(translate(cam.position) * rotation);
+
+    drawCube(proj, view);
 }
 
 //--------------------------------------------------------------

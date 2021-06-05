@@ -1,6 +1,7 @@
 #pragma once
 
 #include "ofMain.h"
+#include "ofxEasyCubemap.h"
 
 class MyClass
 {
@@ -61,15 +62,20 @@ class ofApp : public ofBaseApp
 
 	ofMesh shieldMesh;
 	ofMesh planeMesh;
+	ofMesh cubeMesh;
+	
 	ofShader uvShader;
 	ofShader specularShader;
 	ofShader blinnPhong;
 	ofShader waterShader;
+	ofShader cubemapShader;
 
 	ofImage waterNrm;
 	ofImage diffuseTex;
 	ofImage nrmTex;
 	ofImage specTex;
+
+	ofxEasyCubemap cubemap;
 
 public:
 	void setup();
@@ -90,4 +96,6 @@ public:
 
 	void drawWater(DirectionalLight& dirLight, glm::mat4& proj, glm::mat4& view);
 	void drawShield(DirectionalLight& dirLight, glm::mat4& proj, glm::mat4& view);
+
+	void drawCube(glm::mat4& proj, glm::mat4& view);
 };
