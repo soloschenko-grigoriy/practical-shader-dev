@@ -60,12 +60,16 @@ class ofApp : public ofBaseApp
 	// glm::vec3 charPos;
 
 	ofMesh shieldMesh;
+	ofMesh planeMesh;
 	ofShader uvShader;
 	ofShader specularShader;
+	ofShader blinnPhong;
+	ofShader waterShader;
 
-	ofImage shieldDiffuseTex;
-	ofImage shieldSpecTex;
-	ofImage shieldNormTex;
+	ofImage waterNrm;
+	ofImage diffuseTex;
+	ofImage nrmTex;
+	ofImage specTex;
 
 public:
 	void setup();
@@ -83,4 +87,7 @@ public:
 	void windowResized(int w, int h);
 	void dragEvent(ofDragInfo dragInfo);
 	void gotMessage(ofMessage msg);
+
+	void drawWater(DirectionalLight& dirLight, glm::mat4& proj, glm::mat4& view);
+	void drawShield(DirectionalLight& dirLight, glm::mat4& proj, glm::mat4& view);
 };
