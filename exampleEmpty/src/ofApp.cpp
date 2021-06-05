@@ -187,26 +187,27 @@ void ofApp::setup()
     ofDisableArbTex();
     ofEnableDepthTest();
 
-    // planeMesh.load("ch_10/plane.ply");
-    // calcTangents(planeMesh);
+    planeMesh.load("ch_10/plane.ply");
+    calcTangents(planeMesh);
 
-    // shieldMesh.load("ch_9/shield.ply");
-    // calcTangents(shieldMesh);
+    shieldMesh.load("ch_9/shield.ply");
+    calcTangents(shieldMesh);
 
-    // blinnPhong.load("ch_10/mesh.vert", "ch_10/blinnPhong.frag");
-    // waterShader.load("ch_10/water.vert", "ch_10/water.frag");
+    blinnPhong.load("ch_10/mesh.vert", "ch_11/shied.frag");
+    waterShader.load("ch_10/water.vert", "ch_11/water.frag");
 
-    // diffuseTex.load("ch_9/shield_diffuse.png");
-    // specTex.load("ch_9/shield_spec.png");
-    // nrmTex.load("ch_10/shield_normal.png");
-    // waterNrm.load("ch_10/water_nrm.png");
-    // waterNrm.getTexture().setTextureWrap(GL_REPEAT, GL_REPEAT);
+    diffuseTex.load("ch_9/shield_diffuse.png");
+    specTex.load("ch_9/shield_spec.png");
+    nrmTex.load("ch_10/shield_normal.png");
+    waterNrm.load("ch_10/water_nrm.png");
+    waterNrm.getTexture().setTextureWrap(GL_REPEAT, GL_REPEAT);
 
     cubeMesh.load("ch_11/cube.ply");
     cubemapShader.load("ch_11/cubemap.vert", "ch_11/cubemap.frag");
-    cubemap.load("ch_11/cube_front.jpg", "ch_11/cube_back.jpg",
-                 "ch_11/cube_right.jpg", "ch_11/cube_left.jpg",
-                 "ch_11/cube_top.jpg", "ch_11/cube_bottom.jpg");
+    skyboxShader.load("ch_11/skybox.vert", "ch_11/skybox.frag");
+    cubemap.load("ch_11/cube2_front.jpg", "ch_11/cube2_back.jpg",
+                 "ch_11/cube2_right.jpg", "ch_11/cube2_left.jpg",
+                 "ch_11/cube2_top.jpg", "ch_11/cube2_bottom.jpg");
 
     cam.position = glm::vec3(0, 0.75f, 1.0);
     cam.fov = glm::radians(90.0f);
@@ -248,7 +249,7 @@ void ofApp::drawWater(DirectionalLight &dirLight, glm::mat4 &proj, glm::mat4 &vi
     shd.setUniformMatrix3f("normalMatrix", normalMatrix);
     shd.setUniform3f("meshSpecCol", glm::vec3(1, 1, 1));
     shd.setUniformTexture("normTex", waterNrm, 0);
-    ;
+    shd.setUniformTexture("envMap", cubemap.getTexture(), 1);
     shd.setUniform1f("time", t);
 
     shd.setUniform3f("ambientCol", glm::vec3(0.1, 0.1, 0.1));
@@ -278,6 +279,7 @@ void ofApp::drawShield(DirectionalLight &dirLight, glm::mat4 &proj, glm::mat4 &v
     ;
     shd.setUniformTexture("specTex", specTex, 1);
     shd.setUniformTexture("normTex", nrmTex, 2);
+    shd.setUniformTexture("envMap", cubemap.getTexture(), 3);
     shd.setUniform3f("ambientCol", glm::vec3(0.1, 0.1, 0.1));
     shd.setUniform3f("lightDir", getLightDirection(dirLight));
     shd.setUniform3f("lightColor", getLightColor(dirLight));
@@ -306,6 +308,23 @@ void ofApp::drawCube(glm::mat4 &proj, glm::mat4 &view)
     shd.setUniform3f("cameraPos", cam.position);
     cubeMesh.draw();
     shd.end();
+}
+
+void ofApp::drawSkybox(mat4 &proj, mat4 &view)
+{
+    mat4 model = translate(cam.position);
+    mat4 mvp = proj * view * model;
+
+    ofShader &shd = skyboxShader;
+    glDepthFunc(GL_LEQUAL);
+
+    shd.begin();
+    shd.setUniformMatrix4f("mvp", mvp);
+    shd.setUniformTexture("cubemap", cubemap.getTexture(), 0);
+    shd.setUniform3f("cameraPos", cam.position);
+    cubeMesh.draw();
+    shd.end();
+    glDepthFunc(GL_LESS);
 }
 
 //--------------------------------------------------------------
@@ -425,7 +444,7 @@ void ofApp::draw()
     // planeMesh.draw();
     // specularShader.end();
 
-    // drawShield(dirLight, proj, view);
+    //
     // drawWater(waterLight, proj, view);
 
     DirectionalLight dirLight;
@@ -445,7 +464,10 @@ void ofApp::draw()
     mat4 rotation = mat4();
     mat4 view = inverse(translate(cam.position) * rotation);
 
-    drawCube(proj, view);
+    // drawCube(proj, view);
+    drawSkybox(proj, view);
+    drawShield(dirLight, proj, view);
+    drawWater(waterLight, proj, view);
 }
 
 //--------------------------------------------------------------

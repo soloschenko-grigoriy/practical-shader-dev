@@ -69,6 +69,7 @@ class ofApp : public ofBaseApp
 	ofShader blinnPhong;
 	ofShader waterShader;
 	ofShader cubemapShader;
+	ofShader skyboxShader;
 
 	ofImage waterNrm;
 	ofImage diffuseTex;
@@ -98,4 +99,5 @@ public:
 	void drawShield(DirectionalLight& dirLight, glm::mat4& proj, glm::mat4& view);
 
 	void drawCube(glm::mat4& proj, glm::mat4& view);
+	void drawSkybox(glm::mat4& proj, glm::mat4& view);
 };
