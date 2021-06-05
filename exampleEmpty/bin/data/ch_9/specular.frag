@@ -17,8 +17,13 @@ void main () {
     vec3 refl = normalize(reflect(-lightDir, normalDir));
     vec3 toCam = normalize(cameraPosition - fragWorldPosition);
 
-    float specAmount = max(0.0, dot(refl, toCam));
-    float specBrightness = pow(specAmount, 16.0);
+    // float specAmount = max(0.0, dot(refl, toCam));
+    // float specBrightness = pow(specAmount, 16.0);
+
+    // blinn-phong
+    vec3 halfVec = normalize(toCam + lightDir);
+    float specAmount = max(0.0, dot(halfVec, normalDir));
+    float specBrightness = pow(specAmount, 2.0);
 
     float diffuseAmount = max(0.0, dot(normalDir, lightDir));
     float diffuseBrightness = pow(diffuseAmount, 2);
