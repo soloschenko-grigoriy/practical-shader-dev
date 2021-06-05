@@ -120,10 +120,11 @@ void ofApp::setup()
     // ofSetBackgroundColor(ofColor::black);
 
     shieldMesh.load("ch_9/shield.ply");
-    specularShader.load("ch_9/mesh.vert", "ch_9/specular.frag");
+    specularShader.load("ch_10/mesh.vert", "ch_10/specular.frag");
 
     shieldDiffuseTex.load("ch_9/shield_diffuse.png");
     shieldSpecTex.load("ch_9/shield_spec.png");
+    shieldNormTex.load("ch_10/shield_normal.png");
 }
 
 //--------------------------------------------------------------
@@ -254,6 +255,7 @@ void ofApp::draw()
     specularShader.setUniform3f("ambientCol", glm::vec3(0.0, 0., 0.));
     specularShader.setUniformTexture("diffuseTex", shieldDiffuseTex, 0);
     specularShader.setUniformTexture("specTex", shieldSpecTex, 1);
+    specularShader.setUniformTexture("normTex", shieldNormTex, 2);
     shieldMesh.draw();
     specularShader.end();
 }

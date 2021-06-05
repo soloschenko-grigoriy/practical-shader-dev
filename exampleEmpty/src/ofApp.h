@@ -65,6 +65,7 @@ class ofApp : public ofBaseApp
 
 	ofImage shieldDiffuseTex;
 	ofImage shieldSpecTex;
+	ofImage shieldNormTex;
 
 public:
 	void setup();
