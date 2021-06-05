@@ -3,10 +3,13 @@
 uniform vec3 lightDir;
 uniform vec3 lightColor;
 uniform vec3 cameraPosition;
-uniform vec3 meshColor;
-uniform vec3 meshSpecCol;
+// uniform vec3 meshColor;
+// uniform vec3 meshSpecCol;
 uniform vec3 ambientCol;
+uniform sampler2D diffuseTex;
+uniform sampler2D specTex;
 
+in vec2 fragUV;
 in vec3 fragNorm;
 in vec3 fragWorldPosition;
 
@@ -27,6 +30,9 @@ void main () {
 
     float diffuseAmount = max(0.0, dot(normalDir, lightDir));
     float diffuseBrightness = pow(diffuseAmount, 2);
+
+    vec3 meshColor = texture(diffuseTex, fragUV).xyz;
+    float meshSpecCol = texture(specTex, fragUV).x;
 
     vec3 diffuse = meshColor * diffuseBrightness * lightColor;
     vec3 specular = meshSpecCol * specBrightness * lightColor;

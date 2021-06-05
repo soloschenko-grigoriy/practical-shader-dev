@@ -119,8 +119,11 @@ void ofApp::setup()
     ofEnableDepthTest();
     // ofSetBackgroundColor(ofColor::black);
 
-    torusMesh.load("ch_7/torus.ply");
+    shieldMesh.load("ch_9/shield.ply");
     specularShader.load("ch_9/mesh.vert", "ch_9/specular.frag");
+
+    shieldDiffuseTex.load("ch_9/shield_diffuse.png");
+    shieldSpecTex.load("ch_9/shield_spec.png");
 }
 
 //--------------------------------------------------------------
@@ -218,18 +221,22 @@ void ofApp::draw()
     // cloudShader.end();
 
     DirectionalLight dirLight;
-    dirLight.direction = normalize(vec3(1, -1, 0));
+    dirLight.direction = normalize(vec3(1, -1, -0.8));
     dirLight.color = vec3(1, 1, 1);
     dirLight.intensity = 1.0f;
 
-    cam.position = vec3(0, 0.75f, 1.0f);
+    cam.position = vec3(0, 0.85f, 1.0f);
     cam.fov = radians(90.0f);
     float cAngle = radians(-45.0f);
     vec3 right = vec3(1, 0, 0);
 
     float aspect = 1024.0f / 768.0f;
 
-    mat4 model = rotate(radians(90.0f), right) * scale(vec3(0.5, 0.5, 0.5));
+    static float rotAngle = 0.0f;
+    rotAngle += 0.01f;
+    vec3 up = vec3(0, 1, 0);
+    mat4 rotation = rotate(radians(-45.0f), right) * rotate(rotAngle, up);
+    mat4 model = rotation * scale(vec3(1.5, 1.5, 1.5));
     mat4 view = inverse(translate(cam.position) * rotate(cAngle, right));
     mat4 proj = perspective(cam.fov, aspect, 0.01f, 10.0f);
     mat4 mvp = proj * view * model;
@@ -244,8 +251,10 @@ void ofApp::draw()
     specularShader.setUniform3f("cameraPosition", cam.position);
     specularShader.setUniform3f("meshSpecCol", vec3(1, 1, 1));
     specularShader.setUniformMatrix4f("model", model);
-    specularShader.setUniform3f("ambientCol", glm::vec3(0.0,0.,0.));
-    torusMesh.draw();
+    specularShader.setUniform3f("ambientCol", glm::vec3(0.0, 0., 0.));
+    specularShader.setUniformTexture("diffuseTex", shieldDiffuseTex, 0);
+    specularShader.setUniformTexture("specTex", shieldSpecTex, 1);
+    shieldMesh.draw();
     specularShader.end();
 }
 

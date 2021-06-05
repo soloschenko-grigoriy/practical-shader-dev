@@ -13,7 +13,7 @@ out vec2 fragUV;
 out vec3 fragWorldPosition;
 
 void main () {
-    fragUV = uv;
+    fragUV = vec2(uv.x, 1.0 - uv.y);
     fragNorm = normalMatrix * nrm;
     fragWorldPosition = (model * vec4(pos, 1.0)).xyz;
 

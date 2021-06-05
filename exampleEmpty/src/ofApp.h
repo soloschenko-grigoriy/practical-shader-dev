@@ -59,9 +59,12 @@ class ofApp : public ofBaseApp
 	// bool walkLeft;
 	// glm::vec3 charPos;
 
-	ofMesh torusMesh;
+	ofMesh shieldMesh;
 	ofShader uvShader;
 	ofShader specularShader;
+
+	ofImage shieldDiffuseTex;
+	ofImage shieldSpecTex;
 
 public:
 	void setup();
